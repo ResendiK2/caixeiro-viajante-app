@@ -3,8 +3,8 @@ export interface IClient {
     name: string
     email: string
     phone: string
-    coordinate_x: number
-    coordinate_y: number
+    coordinate_x: number | string
+    coordinate_y: number | string
 }
 
 export interface ICreateService {
