@@ -2,17 +2,18 @@ import axios from "axios"
 
 import { IClient, ICreateService, IGetService } from "@/utils/types"
 
-const apiUrl =/*  process?.env?.REACT_APP_API_URL || */ 'http://localhost:3000/'
+const apiUrl = 'http://localhost:3000/'
 
 export const createService = async (data: IClient): Promise<ICreateService> => {
     try {
         const response = await axios({
             method: 'POST',
             url: `${apiUrl}clients`,
+            headers: { 'Content-Type': 'application/json' },
             data
         })
 
-        if (response.status !== 200) throw new Error()
+        if (response.status !== 201) throw new Error()
 
         return response.data
     } catch (error) {
@@ -68,3 +69,19 @@ export const deleteService = async (id: string): Promise<{ success: boolean }> =
         return { success: false }
     }
 }
+
+export const routeService = async (): Promise<{ success: boolean, response: IClient[] }> => {
+    try {
+        const response = await axios({
+            method: 'GET',
+            url: `${apiUrl}clients/route`
+        })
+
+        if (response.status !== 200) throw new Error()
+
+        return response.data
+    } catch (error) {
+        console.error(error)
+        return { success: false, response: [] }
+    }
+} 
