@@ -19,7 +19,7 @@ import {
 } from "./ui/dialog";
 
 import { IClient } from "@/utils/types";
-import { createService } from "@/services/cliente-service";
+import { createService } from "@/services/client-service";
 
 const formSchema = z.object({
     name: z.string().min(3, {
@@ -93,6 +93,22 @@ export function CreateClientComponent(
 
     }
 
+    const formatNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const phone = e.target.value.replace(/\D/g, '')
+
+        if (phone.length < 7) {
+            form.setValue('phone', phone)
+            return
+        }
+
+        if (phone.length < 11) {
+            form.setValue('phone', phone.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3'))
+            return
+        }
+
+        form.setValue('phone', phone.slice(0, 11).replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3'))
+    }
+
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -143,7 +159,12 @@ export function CreateClientComponent(
                                 <FormItem>
                                     <FormLabel>Telefone</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Telefone" {...field} />
+                                        <Input
+                                            maxLength={15}
+                                            placeholder="Telefone"
+                                            {...field}
+                                            onChange={formatNumber}
+                                        />
                                     </FormControl>
                                 </FormItem>
                             )}
@@ -161,9 +182,6 @@ export function CreateClientComponent(
                                             <Input
                                                 placeholder="Coordenada X"
                                                 {...field}
-                                                onChange={(e) => {
-                                                    form.setValue('coordinate_x', Number(e.target.value))
-                                                }}
                                             />
                                         </FormControl>
                                     </FormItem>
@@ -181,9 +199,6 @@ export function CreateClientComponent(
                                             <Input
                                                 placeholder="Coordenada Y"
                                                 {...field}
-                                                onChange={(e) => {
-                                                    form.setValue('coordinate_y', Number(e.target.value))
-                                                }}
                                             />
                                         </FormControl>
                                     </FormItem>
