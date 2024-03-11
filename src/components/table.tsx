@@ -15,18 +15,20 @@ import {
   DialogTrigger
 } from "./ui/dialog";
 
-import { deleteService } from "@/services/cliente-service";
+import { deleteService } from "@/services/client-service";
 
 import { IClient } from "@/utils/types";
 
 export function TableComponent({
+  isVisit,
   clients,
   setClients,
   setAllClients
 }: {
+  isVisit?: boolean
   clients: IClient[],
-  setClients: Dispatch<SetStateAction<IClient[]>>
-  setAllClients: Dispatch<SetStateAction<IClient[]>>
+  setClients?: Dispatch<SetStateAction<IClient[]>>
+  setAllClients?: Dispatch<SetStateAction<IClient[]>>
 }) {
   const deleteRef = useRef<HTMLButtonElement>(null)
 
@@ -37,6 +39,8 @@ export function TableComponent({
       toast.error("Erro ao excluir cliente")
       return
     }
+
+    if (!setClients || !setAllClients) return
 
     setClients((prev) => prev.filter(client => client.id !== id))
     setAllClients((prev) => prev.filter(client => client.id !== id))
@@ -50,21 +54,32 @@ export function TableComponent({
     <Table >
       <TableHeader>
         <TableRow>
+          {isVisit &&
+            <TableHead>
+              Ordem
+            </TableHead>
+          }
           <TableHead>
             Nome
           </TableHead>
-          <TableHead>
-            Email
-          </TableHead>
-          <TableHead>
-            Telefone
-          </TableHead>
+          {!isVisit &&
+            <>
+              <TableHead>
+                Email
+              </TableHead>
+              <TableHead>
+                Telefone
+              </TableHead>
+            </>
+          }
           <TableHead align="center">
             Coordenadas (X, Y)
           </TableHead>
-          <TableHead className="text-center">
-            Ações
-          </TableHead>
+          {!isVisit &&
+            <TableHead className="text-center">
+              Ações
+            </TableHead>
+          }
         </TableRow>
       </TableHeader>
 
@@ -76,32 +91,37 @@ export function TableComponent({
           phone,
           coordinate_x,
           coordinate_y
-        }) => (
+        }, idx) => (
           <TableRow
             key={id}
           >
-            <TableCell
-              width={2}
-            >
+            {isVisit &&
+              <TableCell width={1}>
+                {idx + 1}º
+              </TableCell>
+            }
+
+            <TableCell>
               {name}
             </TableCell>
-            <TableCell
-              width={1}
-            >
-              {email}
-            </TableCell>
-            <TableCell
-              width={1}
-            >
-              {phone}
-            </TableCell>
-            <TableCell
-              width={1}
-              align="center"
-            >
+
+            {!isVisit &&
+              <>
+                <TableCell>
+                  {email}
+                </TableCell>
+
+                <TableCell>
+                  {phone}
+                </TableCell>
+              </>
+            }
+
+            <TableCell align="center">
               {coordinate_x}, {coordinate_y}
             </TableCell>
-            {id &&
+
+            {id && !isVisit &&
               <TableCell
                 width={1}
                 align="center"
