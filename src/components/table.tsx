@@ -23,12 +23,14 @@ export function TableComponent({
   isVisit,
   clients,
   setClients,
-  setAllClients
+  setAllClients,
+  setHasChanges
 }: {
   isVisit?: boolean
   clients: IClient[],
   setClients?: Dispatch<SetStateAction<IClient[]>>
   setAllClients?: Dispatch<SetStateAction<IClient[]>>
+  setHasChanges?: Dispatch<SetStateAction<boolean>>
 }) {
   const deleteRef = useRef<HTMLButtonElement>(null)
 
@@ -40,8 +42,9 @@ export function TableComponent({
       return
     }
 
-    if (!setClients || !setAllClients) return
+    if (!setClients || !setAllClients || !setHasChanges) return
 
+    setHasChanges(true)
     setClients((prev) => prev.filter(client => client.id !== id))
     setAllClients((prev) => prev.filter(client => client.id !== id))
 

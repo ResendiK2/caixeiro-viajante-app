@@ -10,6 +10,7 @@ export interface IClient {
 export interface ICreateService {
     success: boolean,
     response?: IClient
+    error?: string
 }
 
 export interface IGetService {

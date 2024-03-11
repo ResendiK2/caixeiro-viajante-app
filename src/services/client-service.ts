@@ -13,12 +13,16 @@ export const createService = async (data: IClient): Promise<ICreateService> => {
             data
         })
 
+        if (response.status === 400) return {
+            response: response.data,
+            success: false
+        }
+
         if (response.status !== 201) throw new Error()
 
         return response.data
-    } catch (error) {
-        console.error(error)
-        return { success: false }
+    } catch (error: any) {
+        return { success: false, response: {} as IClient, error: error?.response?.data?.error }
     }
 }
 

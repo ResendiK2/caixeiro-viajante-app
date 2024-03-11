@@ -28,22 +28,24 @@ const formSchema = z.object({
     email: z.string().email({
         message: "Email inválido."
     }),
-    phone: z.string().min(8, {
+    phone: z.string().min(14, {
         message: "Telefone inválido."
-    }).max(11, {
+    }).max(15, {
         message: "Telefone inválido."
     }),
-    coordinate_x: z.number(),
-    coordinate_y: z.number(),
+    coordinate_x: z.string(),
+    coordinate_y: z.string(),
 })
 
 export function CreateClientComponent(
     {
         setClients,
         setAllClients,
+        setHasChanges
     }: {
         setClients: Dispatch<SetStateAction<IClient[]>>
         setAllClients: Dispatch<SetStateAction<IClient[]>>
+        setHasChanges: Dispatch<SetStateAction<boolean>>
     }
 ) {
     const [clientLoading, setClientLoading] = useState(false)
@@ -56,8 +58,8 @@ export function CreateClientComponent(
             name: '',
             email: '',
             phone: '',
-            coordinate_x: 0,
-            coordinate_y: 0
+            coordinate_x: '0',
+            coordinate_y: '0'
         },
     });
 
@@ -75,15 +77,16 @@ export function CreateClientComponent(
             coordinate_y
         }
 
-        const { success, response } = await createService(data)
+        const { success, response, error } = await createService(data)
 
         setClientLoading(false)
 
         if (!success || !response?.id) {
-            toast.error("Erro ao adicionar cliente")
+            toast.error(error || "Erro ao adicionar cliente")
             return
         }
 
+        setHasChanges(true)
         setClients((prev) => [...prev, response])
         setAllClients((prev) => [...prev, response])
 
@@ -112,7 +115,9 @@ export function CreateClientComponent(
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button>
+                <Button
+                    ref={dialogRef}
+                >
                     <PlusCircle className="w-4 h-4" />
                 </Button>
             </DialogTrigger>
@@ -182,6 +187,7 @@ export function CreateClientComponent(
                                             <Input
                                                 placeholder="Coordenada X"
                                                 {...field}
+                                                type="number"
                                             />
                                         </FormControl>
                                     </FormItem>
@@ -199,6 +205,7 @@ export function CreateClientComponent(
                                             <Input
                                                 placeholder="Coordenada Y"
                                                 {...field}
+                                                type="number"
                                             />
                                         </FormControl>
                                     </FormItem>
@@ -210,7 +217,6 @@ export function CreateClientComponent(
                             <DialogClose asChild>
                                 <Button
                                     disabled={clientLoading}
-                                    ref={dialogRef}
                                     variant="outline"
                                     onClick={() => form.reset()}
                                 >

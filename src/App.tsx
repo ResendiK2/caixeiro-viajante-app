@@ -19,6 +19,7 @@ export function App() {
   const [allClients, setAllClients] = useState<IClient[]>([])
   const [clients, setClients] = useState<IClient[]>([])
   const [filter, setFilter] = useState('')
+  const [hasChanges, setHasChanges] = useState(true)
 
   const getUsers = async () => {
     try {
@@ -92,8 +93,12 @@ export function App() {
           <CreateClientComponent
             setClients={setClients}
             setAllClients={setAllClients}
+            setHasChanges={setHasChanges}
           />
-          <GetRouteComponent />
+          <GetRouteComponent
+            hasChanges={hasChanges}
+            setHasChanges={setHasChanges}
+          />
         </div>
       </div >
 
@@ -102,6 +107,7 @@ export function App() {
           clients={clients}
           setClients={setClients}
           setAllClients={setAllClients}
+          setHasChanges={setHasChanges}
         />
       </div>
 
