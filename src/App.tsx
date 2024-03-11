@@ -11,7 +11,8 @@ import { Toaster } from "./components/ui/sonner";
 import { CreateClientComponent } from "./components/createClient";
 
 import { IClient } from "./utils/types";
-import { filterService, getService } from "./services/cliente-service";
+import { filterService, getService } from "./services/client-service";
+import { GetRouteComponent } from "./components/getRoute";
 
 export function App() {
 
@@ -70,27 +71,29 @@ export function App() {
     <div className="p-6 max-w-4xl mx-auto space-y-4">
       <h1 className="text-3xl font-bold">Clientes</h1>
 
-      <div className="md:flex justify-between items-center max-md:space-y-2">
+      <div className="md:flex justify-between items-center max-md:space-y-2 gap-2">
+        <Input
+          name="filter"
+          placeholder="Filtrar clientes"
+          className="w-2/3"
+          value={filter}
+          onChange={(e) => {
+            setFilter(e.target.value)
+          }}
+        />
+        <Button
+          variant="outline"
+          onClick={() => filterClients(filter)}
+        >
+          <Search className="w-4 h-4" />
+        </Button>
+
         <div className="flex flex-1 justify-end items-center gap-2">
-          <Input
-            name="filter"
-            placeholder="Filtrar clientes"
-            className="w-2/3"
-            value={filter}
-            onChange={(e) => {
-              setFilter(e.target.value)
-            }}
-          />
-          <Button
-            variant="outline"
-            onClick={() => filterClients(filter)}
-          >
-            <Search className="w-4 h-4" />
-          </Button>
           <CreateClientComponent
             setClients={setClients}
             setAllClients={setAllClients}
           />
+          <GetRouteComponent />
         </div>
       </div >
 
