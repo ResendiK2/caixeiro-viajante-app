@@ -54,118 +54,126 @@ export function TableComponent({
   }
 
   return (
-    <Table >
-      <TableHeader>
-        <TableRow>
-          {isVisit &&
-            <TableHead>
-              Ordem
-            </TableHead>
-          }
-          <TableHead>
-            Nome
-          </TableHead>
-          {!isVisit &&
-            <>
+    <>
+      {!clients?.length ?
+        <div className="text-center">
+          Nenhum cliente encontrado
+        </div>
+        :
+        <Table >
+          <TableHeader>
+            <TableRow>
+              {isVisit &&
+                <TableHead>
+                  Ordem
+                </TableHead>
+              }
               <TableHead>
-                Email
+                Nome
               </TableHead>
-              <TableHead>
-                Telefone
+              {!isVisit &&
+                <>
+                  <TableHead>
+                    Email
+                  </TableHead>
+                  <TableHead>
+                    Telefone
+                  </TableHead>
+                </>
+              }
+              <TableHead align="center">
+                Coordenadas (X, Y)
               </TableHead>
-            </>
-          }
-          <TableHead align="center">
-            Coordenadas (X, Y)
-          </TableHead>
-          {!isVisit &&
-            <TableHead className="text-center">
-              Ações
-            </TableHead>
-          }
-        </TableRow>
-      </TableHeader>
+              {!isVisit &&
+                <TableHead className="text-center">
+                  Ações
+                </TableHead>
+              }
+            </TableRow>
+          </TableHeader>
 
-      <TableBody>
-        {clients.map(({
-          id,
-          name,
-          email,
-          phone,
-          coordinate_x,
-          coordinate_y
-        }, idx) => (
-          <TableRow
-            key={id}
-          >
-            {isVisit &&
-              <TableCell width={1}>
-                {idx + 1}º
-              </TableCell>
-            }
-
-            <TableCell>
-              {name}
-            </TableCell>
-
-            {!isVisit &&
-              <>
-                <TableCell>
-                  {email}
-                </TableCell>
-
-                <TableCell>
-                  {phone}
-                </TableCell>
-              </>
-            }
-
-            <TableCell align="center">
-              {coordinate_x}, {coordinate_y}
-            </TableCell>
-
-            {id && !isVisit &&
-              <TableCell
-                width={1}
-                align="center"
+          <TableBody>
+            {clients.map(({
+              id,
+              name,
+              email,
+              phone,
+              coordinate_x,
+              coordinate_y
+            }, idx) => (
+              <TableRow
+                key={id}
               >
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button variant="destructive">
-                      <Trash className="w-4 h-4" />
-                    </Button>
-                  </DialogTrigger>
+                {isVisit &&
+                  <TableCell width={1}>
+                    {idx + 1}º
+                  </TableCell>
+                }
 
-                  <DialogContent>
-                    <DialogTitle>
-                      Excluir Cliente
-                    </DialogTitle>
-                    <DialogDescription>
-                      Deseja realmente excluir o cliente?
-                    </DialogDescription>
-                    <DialogFooter>
-                      <DialogClose className="max-sm:mt-2" asChild>
-                        <Button
-                          ref={deleteRef}
-                          variant="outline"
-                        >
-                          Cancelar
+                <TableCell>
+                  {name}
+                </TableCell>
+
+                {!isVisit &&
+                  <>
+                    <TableCell>
+                      {email}
+                    </TableCell>
+
+                    <TableCell>
+                      {phone}
+                    </TableCell>
+                  </>
+                }
+
+                <TableCell align="center">
+                  {coordinate_x}, {coordinate_y}
+                </TableCell>
+
+                {id && !isVisit &&
+                  <TableCell
+                    width={1}
+                    align="center"
+                  >
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button variant="destructive">
+                          <Trash className="w-4 h-4" />
                         </Button>
-                      </DialogClose>
-                      <Button
-                        variant="destructive"
-                        onClick={() => deleteClient(id)}
-                      >
-                        Excluir
-                      </Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-              </TableCell>
-            }
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+                      </DialogTrigger>
+
+                      <DialogContent>
+                        <DialogTitle>
+                          Excluir Cliente
+                        </DialogTitle>
+                        <DialogDescription>
+                          Deseja realmente excluir o cliente?
+                        </DialogDescription>
+                        <DialogFooter>
+                          <DialogClose className="max-sm:mt-2" asChild>
+                            <Button
+                              ref={deleteRef}
+                              variant="outline"
+                            >
+                              Cancelar
+                            </Button>
+                          </DialogClose>
+                          <Button
+                            variant="destructive"
+                            onClick={() => deleteClient(id)}
+                          >
+                            Excluir
+                          </Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                  </TableCell>
+                }
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      }
+    </>
   )
 }
