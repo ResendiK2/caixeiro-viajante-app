@@ -91,6 +91,7 @@ export function CreateClientComponent(
         setAllClients((prev) => [...prev, response])
 
         dialogRef.current?.click()
+        form.reset()
 
         toast.success("Cliente adicionado com sucesso")
 
